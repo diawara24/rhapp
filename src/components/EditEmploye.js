@@ -35,7 +35,7 @@ class EditEmploye extends Component {
     }
 
     componentDidMount(){
-        axios.get(`https://62e1af1be8ad6b66d84e1de0.mockapi.io/api/Employe/${this.props.match.params.id}`)
+        axios.get(`http://localhost:8080/api/employe/${this.props.match.params.id}`)
             .then(res => {
                 this.setState({
                     nom: res.data.nom,
