@@ -12,7 +12,7 @@ class Employe extends Component {
         // eslint-disable-next-line no-restricted-globals
         if(confirm("are you sure wants to delete?")){
             console.log(this.props.obj.id);
-            await axios.delete(`https://62e1af1be8ad6b66d84e1de0.mockapi.io/api/Employe/${this.props.obj.id}`)
+            await axios.delete(`http://localhost:8080/api/employe/${this.props.obj.id}`)
           .then(response => {
             console.log('Employe successfully deleted !')
           })

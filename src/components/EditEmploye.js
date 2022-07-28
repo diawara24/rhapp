@@ -101,7 +101,7 @@ class EditEmploye extends Component {
             salaire: parseFloat(this.state.salaire)
            
         };
-        axios.put(`https://62e1af1be8ad6b66d84e1de0.mockapi.io/api/Employe/${ this.props.match.params.id}`, EmployeObject)
+        axios.put(`http://localhost:8080/api/employe/${ this.props.match.params.id}`, EmployeObject)
           .then(res => console.log(res.data));
     
         this.setState(

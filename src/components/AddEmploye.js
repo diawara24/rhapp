@@ -81,7 +81,7 @@ class AddEmploye extends Component {
             salaire: parseFloat(this.state.salaire)
            
         };
-        axios.post('https://62e1af1be8ad6b66d84e1de0.mockapi.io/api/Employe', EmployeObject)
+        axios.post('http://localhost:8080/api/employe/', EmployeObject)
           .then(res => console.log(res.data));
     
         this.setState(
