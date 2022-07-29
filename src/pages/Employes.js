@@ -11,18 +11,36 @@ class Employes extends Component {
         this.state = {
           employes: []
         };
-      }
+
+    }
+
+
 
     componentDidMount(){
-        axios.get('http://localhost:8080/api/employe/')
-            .then(res => {
+        var checkUserlooged =   async () => {
+            let token = localStorage.getItem("x-auth-token");
+            if(token === null){
+              localStorage.setItem("x-auth-token", "");
+              token = "";
+            }
+            let tokenVerify =  await axios.post('http://localhost:8080/users/tokenIsValid', null, {headers: {"x-auth-token": token}});
+            if (tokenVerify.data) {
+                var employes = await axios.get('http://localhost:8080/api/employe/',
+                {
+                    headers: {
+                        "x-auth-token": token
+                    }
+                })
+                .catch((error) => {
+                console.log(error);
+                })
+
                 this.setState({
-                    employes: res.data
+                    employes: employes.data
                 });
-            })
-            .catch((error) => {
-            console.log(error);
-            })
+            }
+        }
+        checkUserlooged();
     }
 
     render(){

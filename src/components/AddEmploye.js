@@ -81,21 +81,40 @@ class AddEmploye extends Component {
             salaire: parseFloat(this.state.salaire)
            
         };
-        axios.post('http://localhost:8080/api/employe/', EmployeObject)
-          .then(res => console.log(res.data));
-    
-        this.setState(
-            {
-                nom: '',
-                prenom: '',
-                email: '',
-                adresse: '',
-                telephone: '',
-                grade: '',
-                specialite: '',
-                salaire: ''
+
+        var checkUserlooged =   async () => {
+            let token = localStorage.getItem("x-auth-token");
+            if(token === null){
+              localStorage.setItem("x-auth-token", "");
+              token = "";
+              alert("User not loged !")
+              return;
             }
-        )
+            let tokenVerify =  await axios.post('http://localhost:8080/users/tokenIsValid', null, {headers: {"x-auth-token": token}});
+            if (tokenVerify.data) {
+                axios.post('http://localhost:8080/api/employe/', EmployeObject, {
+                    headers: {
+                        "x-auth-token": token
+                    }
+                })
+                .then(res => console.log(res.data));
+            
+                this.setState(
+                    {
+                        nom: '',
+                        prenom: '',
+                        email: '',
+                        adresse: '',
+                        telephone: '',
+                        grade: '',
+                        specialite: '',
+                        salaire: ''
+                    }
+                )
+            }
+        }
+
+        checkUserlooged()
       }
     
       render() {

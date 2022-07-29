@@ -35,22 +35,40 @@ class EditEmploye extends Component {
     }
 
     componentDidMount(){
-        axios.get(`http://localhost:8080/api/employe/${this.props.match.params.id}`)
-            .then(res => {
-                this.setState({
-                    nom: res.data.nom,
-                    prenom: res.data.prenom,
-                    email: res.data.email,
-                    adresse: res.data.adresse,
-                    telephone: res.data.telephone,
-                    grade: res.data.grade,
-                    specialite: res.data.specialite,
-                    salaire: res.data.salaire
-                });
-            })
-            .catch((error) => {
-            console.log(error);
-            })
+        var checkUserlooged =   async () => {
+            let token = localStorage.getItem("x-auth-token");
+            if(token === null){
+              localStorage.setItem("x-auth-token", "");
+              token = "";
+              alert("User not loged !")
+              return;
+            }
+            let tokenVerify =  await axios.post('http://localhost:8080/users/tokenIsValid', null, {headers: {"x-auth-token": token}});
+            if (tokenVerify.data) {
+            axios.get(`http://localhost:8080/api/employe/${this.props.match.params.id}`,
+                {
+                    headers: {
+                        "x-auth-token": token
+                    }
+                })
+                .then(res => {
+                    this.setState({
+                        nom: res.data.nom,
+                        prenom: res.data.prenom,
+                        email: res.data.email,
+                        adresse: res.data.adresse,
+                        telephone: res.data.telephone,
+                        grade: res.data.grade,
+                        specialite: res.data.specialite,
+                        salaire: res.data.salaire
+                    });
+                })
+                .catch((error) => {
+                console.log(error);
+                })
+            }
+        }
+        checkUserlooged()
     }
 
     onChangeEmployeNom = (e) => {
@@ -101,9 +119,27 @@ class EditEmploye extends Component {
             salaire: parseFloat(this.state.salaire)
            
         };
-        axios.put(`http://localhost:8080/api/employe/${ this.props.match.params.id}`, EmployeObject)
-          .then(res => console.log(res.data));
-    
+        var checkUserlooged =   async () => {
+            let token = localStorage.getItem("x-auth-token");
+            if(token === null){
+              localStorage.setItem("x-auth-token", "");
+              token = "";
+              alert("User not loged !")
+              return;
+            }
+            let tokenVerify =  await axios.post('http://localhost:8080/users/tokenIsValid', null, {headers: {"x-auth-token": token}});
+            if (tokenVerify.data) {
+        axios.put(`http://localhost:8080/api/employe/${ this.props.match.params.id}`, EmployeObject,
+            {
+                headers: {
+                    "x-auth-token": token
+                }
+            }
+            )
+            .then(res => console.log(res.data));
+            }
+        }
+        checkUserlooged()
         this.setState(
             {
                 nom: '',
